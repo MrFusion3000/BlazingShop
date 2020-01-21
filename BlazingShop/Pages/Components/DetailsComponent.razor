@@ -1,5 +1,7 @@
 ﻿@using BlazingShop.Data
 
+
+@*//Show details of a chosen product to reserve/book.*@
     <div class="p-4 border rounded row">
         <div class="col-8">
             <div class="form-group row">
@@ -39,19 +41,31 @@
                     Reserved
                 </div>
                 <div class="col-8">
-                    <input type="checkbox" value="@appointment.Product.Reservation" checked="@appointment.Product.Reservation" class="form-control" disabled />
+                    <input type="checkbox" checked="@(appointment.Product.Reservation)" class="form-control" disabled />
                 </div>
+                @*<div class="col-8">
+                    <input type="checkbox" checked="@(appointment.Product.Reservation)" class="form-control" disabled />
+                </div>*@
             </div>
             <div class="form-group row">
                 <div class="col-4"></div>
                 <div class="col-4">
                     <a href="/" class="btn btn-success form-control">Back to List</a>
                 </div>
-                <div class="col-4">
-                    <button @onclick="OnClickShowAppointment" class="btn btn-primary form-control">
-                        Reserve This Album
-                    </button>
-                </div>
+                @if (!appointment.Product.Reservation)
+                {
+                    <div class="col-4">
+                        <button @onclick="OnClickShowAppointment" class="btn btn-primary form-control">
+                            Reserve This Album
+                        </button>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-4">
+                    Sorry, this item is already reserved.
+                    </div>
+                        }                    
             </div>
         </div>
         <div class="offset-1 col-3">

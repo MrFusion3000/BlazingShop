@@ -31,5 +31,6 @@ namespace BlazingShop.Data
         public string CustomerEmail { get; set; }
 
         public bool IsConfirmed { get; set; }
+        public object Category { get; internal set; }
     }
 }
