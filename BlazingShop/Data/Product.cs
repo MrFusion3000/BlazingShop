@@ -23,7 +23,11 @@ namespace BlazingShop.Data
         [Required]
         public string ShadeColor { get; set; }
 
+        [Range(0, 1)]
+        public bool Reservation { get; set; }
+
         public int CategoryId { get; set; }
+
         [ForeignKey("CategoryId")]
         public virtual Category Category { get; set; }
 

@@ -32,25 +32,27 @@
                             <tr>
                                 <th>Product Name</th>
                                 <th>Price</th>
-                                <th>Shade Color</th>
+                                <th>Condition</th>
                                 <th>Category</th>
+                                <th style="text-align:center">Reserved</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var obj in products)
                             {
-                                <tr>
-                                    <td>@obj.Name</td>
-                                    <td>@obj.Price</td>
-                                    <td>@obj.ShadeColor</td>
-                                    <td>@obj.Category.Name</td>
-                                    <td>
-                                        <button class="btn btn-primary" style="width:150px" @onclick="(()=> EditProduct(obj))">
-                                            Edit
-                                        </button>
-                                    </td>
-                                </tr>
+                            <tr>
+                                <td>@obj.Name</td>
+                                <td>@obj.Price</td>
+                                <td>@obj.ShadeColor</td>
+                                <td>@obj.Category.Name</td>
+                                <td style="text-align:center"><input type="checkbox" checked="@obj.Reservation" disabled/></td>
+                                <td>
+                                    <button class="btn btn-primary" style="width:150px" @onclick="(()=> EditProduct(obj))">
+                                        Edit
+                                    </button>
+                                </td>
+                            </tr>
                             }
                         </tbody>
                     </table>
@@ -114,11 +116,20 @@
                                 </div>
                                 <div class="row py-2">
                                     <div class="col-4">
-                                        Shade Color
+                                        Condition
                                     </div>
                                     <div class="col-8">
                                         <InputText class="form-control" @bind-Value="objProduct.ShadeColor" />
                                         <ValidationMessage For="@(()=> objProduct.ShadeColor)"></ValidationMessage>
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col-4">
+                                        Reserved
+                                    </div>
+                                    <div class="col-8">
+                                        <input type="checkbox" class="form-control" checked="@objProduct.Reservation" @bind-value="objProduct.Reservation"/>
+                                        <ValidationMessage For="@(()=> objProduct.Reservation)"></ValidationMessage>
                                     </div>
                                 </div>
                                 <div class="row py-2">

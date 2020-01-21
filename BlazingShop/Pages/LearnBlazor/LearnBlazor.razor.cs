@@ -8,12 +8,12 @@ namespace BlazingShop.Pages.LearnBlazor
 {
     public class LearnBlazorBase : ComponentBase
     {
-        protected string name = "Spark";
-        protected string WelcomeText = "Time to learn Blazor!";
+        protected string name = "Blazing Records";
+        protected string WelcomeText = "We have all your favorite records!";
 
         protected void getName()
         {
-            name = "Blazor Learner";
+            name = "Blazing Vinyls";
 
         }
     }

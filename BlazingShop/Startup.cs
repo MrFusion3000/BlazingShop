@@ -16,6 +16,13 @@ using Microsoft.Extensions.Hosting;
 using BlazingShop.Areas.Identity;
 using BlazingShop.Data;
 using BlazingShop.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+//using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication;
+//using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BlazingShop
 {
@@ -38,12 +45,50 @@ namespace BlazingShop
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
+
+            services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+            {
+                microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+                microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            });
+
+            //AzureAD
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
+
+            //services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
+            //        .AddAzureAD(options => Configuration.Bind("AzureAd", options));
+
+            //services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+            //{
+            //    options.Authority += "/v2.0/";         // Microsoft identity platform
+
+            //    options.TokenValidationParameters.ValidateIssuer = false; // accept several tenants (here simplified)
+            //});
+
+            //services.AddMvc(options =>
+            //{
+            //    var policy = new AuthorizationPolicyBuilder()
+            //                    .RequireAuthenticatedUser()
+            //                    .Build();
+            //    options.Filters.Add(new AuthorizeFilter(policy));
+            //})
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<ProductService>();
+            services.AddScoped<AppointmentService>();
+            services.AddRouting();
+            //services.AddHealthChecks();
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -70,6 +115,7 @@ namespace BlazingShop
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapHealthChecks("/healthcheck");
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
