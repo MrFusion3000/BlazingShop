@@ -27,9 +27,9 @@ namespace BlazingShop.Services
         {
             return _db.Products.Include(u => u.Category).ToList();
         }
-        public List<Product> GetAppointments()
+        public List<Appointment> GetAppointments()
         {
-            return _db.Appointments.Include(u => u.Appointment).ToList();
+            return _db.Appointments.Include(u => u.ProductId).ToList();
         }
 
             public List<Appointment> GetAppointmentList()
@@ -39,11 +39,46 @@ namespace BlazingShop.Services
 
         public bool CreateAppointment(Appointment appointment)
         {
-            appointment.ProductId = appointment.Product.Id;
+            appointment.Id = appointment.Product.Id;
             appointment.Product = null;
             _db.Appointments.Add(appointment);
             _db.SaveChanges();
             return true;
+        }
+
+        public bool UpdateAppointment(Appointment objAppointment)
+        {
+            var ExistingAppointment = _db.Appointments.FirstOrDefault(u => u.Id == objAppointment.Id);
+            if (ExistingAppointment != null)
+            {
+                //if (objProduct.Image == null)
+                //{
+                //    objProduct.Image = ExistingProduct.Image;
+                //}
+                _db.Appointments.Update(objAppointment);
+                _db.SaveChanges();
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool DeleteAppointment(Product objAppointment)
+        {
+            var ExistingAppointment = _db.Appointments.FirstOrDefault(u => u.Id == objAppointment.Id);
+            if (ExistingAppointment != null)
+            {
+                _db.Appointments.Remove(ExistingAppointment);
+                _db.SaveChanges();
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+
         }
     }
 }

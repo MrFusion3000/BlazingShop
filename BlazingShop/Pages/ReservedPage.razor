@@ -71,7 +71,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="text-info">@(objAppointment.Id != 0 ? "Update" : "Create") Product</h3>
+                        <h3 class="text-info">@(objAppointment.Id != 0 ? "Update" : "Create") Reservation</h3>
                         <button type="button" class="close" @onclick="ClosePopup">
                             <span aria-hidden="true">X</span>
                         </button>
@@ -85,16 +85,16 @@
                                     <div class="col-4">
                                         Category Name
                                     </div>
-                                    @*<div class="col-8">
-                                        <select @onchange="CategorySelectionChanged" class="form-control">
+                                    <div class="col-8">
+                                        @*<select @onchange="CategorySelectionChanged" class="form-control">
                                             @foreach (var categoryInd in categories)
                                             {
                                                 <option value="@categoryInd.Id" selected="@(categoryInd.Id==objAppointment.CategoryId? true: false)">
                                                     @categoryInd.Name
                                                 </option>
                                             }
-                                        </select>
-                                    </div>*@
+                                        </select>*@
+                                    </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="col-4">
@@ -144,7 +144,7 @@
                                     <div class="offset-4 col">
                                         <button class="btn btn-primary form-control" type="submit">Submit</button>
                                     </div>
-                                    @if (objAppointment.Id > 0)
+                                    @*@if (objAppointment.Id > 0)
                                     {
                                         <div class="col">
                                             <button class="btn btn-danger form-control"
@@ -153,7 +153,7 @@
                                                 Delete
                                             </button>
                                         </div>
-                                    }
+                                    }*@
                                 </div>
                             </div>
                             <div class="col-3">
@@ -173,6 +173,9 @@
     List<Appointment> appointments;
 
     Appointment objAppointment = new Appointment();
+    bool ShowPopup1 = false;
+
+    Product objProduct = new Product();
     bool ShowPopup = false;
 
     public byte[] ImageUploaded { get; set; }
@@ -194,17 +197,17 @@
     void EditAppointment(Appointment appointment)
     {
         objAppointment = appointment;
-        categories = Service.GetCategoryList();
+        //categories = Service.GetCategoryList();
         ShowPopup = true;
     }
 
-    void DeleteAppointment()
-    {
-        ShowPopup = false;
-        Service.DeleteAppointment(objAppointment);
-        appointments.Clear();
-        appointments = Service.GetAppointment();
-    }
+    //void DeleteAppointment()
+    //{
+    //    ShowPopup = false;
+    //    Service.DeleteAppointment(objAppointment);
+    //    appointments.Clear();
+    //    appointments = Service.GetAppointments();
+    //}
 
     void ClosePopup()
     {
@@ -217,7 +220,7 @@
         ShowPopup = false;
         if (ImageUploaded != null)
         {
-            objAppointment.Image = ImageUploaded;
+            objProduct.Image = ImageUploaded;
             ImageUploaded = null;
         }
 
