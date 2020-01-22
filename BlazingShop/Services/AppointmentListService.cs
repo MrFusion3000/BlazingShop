@@ -26,6 +26,11 @@ namespace BlazingShop.Services
             return _db.Appointments.Include(u => u.Product).ToList();
         }
 
+        public List<Product> GetProductList()
+        {
+            return _db.Products.ToList();
+        }
+
         public bool CreateAppointment(Appointment objAppointment)
         {
             _db.Appointments.Add(objAppointment);
