@@ -30,7 +30,6 @@ namespace BlazingShop.Data
         [EmailAddress]
         public string CustomerEmail { get; set; }
 
-        public bool IsConfirmed { get; set; }
-        public object Category { get; internal set; }
+        public bool IsConfirmed { get; set; } 
     }
 }

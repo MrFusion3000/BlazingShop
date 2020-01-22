@@ -23,7 +23,8 @@ namespace BlazingShop.Services
 
         public List<Product> GetProducts()
         {
-            return _db.Products.Include(u=>u.Category).ToList();
+           return _db.Products.Include(u => u.Category).ToList();
+        //    return _db.Products.ToList();
         }
 
         public List<Category> GetCategoryList()

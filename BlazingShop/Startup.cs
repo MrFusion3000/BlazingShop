@@ -85,6 +85,7 @@ namespace BlazingShop
             services.AddScoped<CategoryService>();
             services.AddScoped<ProductService>();
             services.AddScoped<AppointmentService>();
+            services.AddScoped<AppointmentListService>();
             services.AddRouting();
             //services.AddHealthChecks();
         }

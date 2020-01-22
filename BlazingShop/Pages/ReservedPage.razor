@@ -4,12 +4,12 @@
 @using BlazorInputFile
 @using System.IO
 
-@inherits OwningComponentBase<AppointmentService>
+@inherits OwningComponentBase<AppointmentListService>
 
 <AuthorizeView>
     <Authorized Context="Auth">
 
-        @if (products == null)
+        @if (appointments == null)
         {
             <p><em>Loading...</em></p>
         }
@@ -18,12 +18,12 @@
             <div class="container border p-3">
                 <div class="row">
                     <div class="col-5">
-                        <h3 class="text-info">Product List</h3>
+                        <h3 class="text-info">Reserved items List</h3>
                     </div>
                     <div class="col-3">
-                        @*<button class="btn btn-info form-control" @onclick="AddNewProduct">
-                            Add New Product
-                        </button>*@
+                        <button class="btn btn-info form-control" @onclick="AddNewAppointment">
+                            Add New Appointment
+                        </button>
                     </div>
                 </div>
                 <div class="row pt-4">
@@ -31,9 +31,9 @@
                         <thead>
                             <tr>
                                 <th>Customer Name</th>
-                                <th>Price</th>
-                                <th>Condition</th>
-                                <th>Category</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Reserved</th>
                                 <th style="text-align:center">Reserved</th>
                                 <th></th>
                             </tr>
@@ -86,11 +86,11 @@
                                         Category Name
                                     </div>
                                     <div class="col-8">
-                                        @*<select @onchange="CategorySelectionChanged" class="form-control">
-                                            @foreach (var categoryInd in categories)
+                                        @*<select @onchange="AppointmentSelectionChanged" class="form-control">
+                                            @foreach (var appointmentInd in appointments)
                                             {
-                                                <option value="@categoryInd.Id" selected="@(categoryInd.Id==objAppointment.CategoryId? true: false)">
-                                                    @categoryInd.Name
+                                                <option value="@appointmentInd.Id" selected="@(appointmentInd.Id==objAppointment.Id? true: false)">
+                                                    @appointmentInd.CustomerName
                                                 </option>
                                             }
                                         </select>*@
@@ -137,27 +137,26 @@
                                         Image
                                     </div>
                                     <div class="col-8">
-                                        <InputFile OnChange="HandleSelection"></InputFile>
+                                        @*<InputFile OnChange="HandleSelection"></InputFile>*@
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="offset-4 col">
                                         <button class="btn btn-primary form-control" type="submit">Submit</button>
                                     </div>
-                                    @*@if (objAppointment.Id > 0)
+                                    @if (objAppointment.Id > 0)
                                     {
                                         <div class="col">
                                             <button class="btn btn-danger form-control"
                                                     @onclick="DeleteAppointment"
-                                                    type="submit">
-                                                Delete
+                                                    type="submit">Delete
                                             </button>
                                         </div>
-                                    }*@
+                                    }
                                 </div>
                             </div>
                             <div class="col-3">
-                                <img src="@convertImageToDisplay(objProduct.Image)" width="100%" />
+                                @*<img src="@convertImageToDisplay(objProduct.Image)" width="100%" />*@
                             </div>
                         </div>
                     </div>
@@ -168,31 +167,29 @@
 }
 
 @code {
-    List<Category> categories;
-    List<Product> products;
+    //List<Category> categories;
+    //List<Product> products;
     List<Appointment> appointments;
-
     Appointment objAppointment = new Appointment();
-    bool ShowPopup1 = false;
-
-    Product objProduct = new Product();
     bool ShowPopup = false;
 
-    public byte[] ImageUploaded { get; set; }
+    //Product objProduct = new Product();
+
+    //public byte[] ImageUploaded { get; set; }
 
     protected override void OnInitialized()
     {
         appointments = Service.GetAppointments();
     }
 
-    //void AddNewProduct()
-    //{
-    //    objProduct = new Product();
-    //    categories = Service.GetCategoryList();
-    //    objProduct.CategoryId = categories.ToList()[0].Id;
-    //    objProduct.Id = 0;
-    //    ShowPopup = true;
-    //}
+    void AddNewAppointment()
+    {
+        objAppointment = new Appointment();
+        //products = Service.GetProductList();
+        //objProduct.CategoryId = categories.ToList()[0].Id;
+        objAppointment.Id = 0;
+        ShowPopup = true;
+    }
 
     void EditAppointment(Appointment appointment)
     {
@@ -201,13 +198,13 @@
         ShowPopup = true;
     }
 
-    //void DeleteAppointment()
-    //{
-    //    ShowPopup = false;
-    //    Service.DeleteAppointment(objAppointment);
-    //    appointments.Clear();
-    //    appointments = Service.GetAppointments();
-    //}
+    void DeleteAppointment()
+    {
+        ShowPopup = false;
+        var result = Service.DeleteAppointment(objAppointment);
+        appointments.Clear();
+        appointments = Service.GetAppointments();
+    }
 
     void ClosePopup()
     {
@@ -218,11 +215,11 @@
     {
         var result = false;
         ShowPopup = false;
-        if (ImageUploaded != null)
-        {
-            objProduct.Image = ImageUploaded;
-            ImageUploaded = null;
-        }
+        //if (ImageUploaded != null)
+        //{
+        //    objProduct.Image = ImageUploaded;
+        //    ImageUploaded = null;
+        //}
 
         if (objAppointment.Id > 0)
         {
@@ -236,16 +233,16 @@
         appointments = Service.GetAppointments();
     }
 
-    async Task HandleSelection(IFileListEntry[] files)
-    {
-        var file = files.FirstOrDefault();
-        if (file != null)
-        {
-            var ms = new MemoryStream();
-            await file.Data.CopyToAsync(ms);
-            ImageUploaded = ms.ToArray();
-        }
-    }
+    //async Task HandleSelection(IFileListEntry[] files)
+    //{
+    //    var file = files.FirstOrDefault();
+    //    if (file != null)
+    //    {
+    //        var ms = new MemoryStream();
+    //        await file.Data.CopyToAsync(ms);
+    //        ImageUploaded = ms.ToArray();
+    //    }
+    //}
 
     string convertImageToDisplay(byte[] image)
     {
@@ -258,11 +255,11 @@
         return "";
     }
 
-    //void CategorySelectionChanged(ChangeEventArgs e)
-    //{
-    //    if (int.TryParse(e.Value.ToString(), out int id))
-    //    {
-    //        objAppointment.CategoryId = id;
-    //    }
-    //}
+    void AppointmentSelectionChanged(ChangeEventArgs e)
+    {
+        if (int.TryParse(e.Value.ToString(), out int id))
+        {
+            objAppointment.Id = id;
+        }
+    }
 }

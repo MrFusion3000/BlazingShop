@@ -17,20 +17,20 @@ else
 
 
 @code {
-    [Parameter]
-    public int ProductId { get; set; }
+        [Parameter]
+        public int ProductId { get; set; }
 
-    public Appointment appointment { get; set; }
+        public Appointment appointment { get; set; }
 
-    //This will be false on details page and true on appointments page.
-    bool ShowAppointment = false;
+        //This will be false on details page and true on appointments page.
+        bool ShowAppointment = false;
 
-    //Create new appointment
-    protected override void OnInitialized()
-    {
-        appointment = new Appointment()
+        //Create new appointment
+        protected override void OnInitialized()
         {
-            AppointmentDate = DateTime.Now
+            appointment = new Appointment()
+            {
+                AppointmentDate = DateTime.Now
         };
         appointment.Product = Service.GetProduct(ProductId);
     }
