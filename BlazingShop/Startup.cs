@@ -46,11 +46,11 @@ namespace BlazingShop
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
 
-            services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-            {
-                microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
-                microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
-            });
+            //services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+            //{
+            //    microsoftOptions.ClientId = Configuration["Authentication:Microsoft:ClientId"];
+            //    microsoftOptions.ClientSecret = Configuration["Authentication:Microsoft:ClientSecret"];
+            //});
 
             //AzureAD
             //services.Configure<CookiePolicyOptions>(options =>
@@ -81,11 +81,10 @@ namespace BlazingShop
 
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-            services.AddSingleton<WeatherForecastService>();
+            //services.AddSingleton<WeatherForecastService>();
             services.AddScoped<CategoryService>();
             services.AddScoped<ProductService>();
             services.AddScoped<AppointmentService>();
-            services.AddScoped<AppointmentListService>();
             services.AddRouting();
             //services.AddHealthChecks();
         }

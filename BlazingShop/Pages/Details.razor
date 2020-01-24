@@ -17,22 +17,22 @@ else
 
 
 @code {
-        [Parameter]
-        public int ProductId { get; set; }
+    [Parameter]
+    public int ProductId { get; set; }
 
-        public Appointment appointment { get; set; }
+    public Appointment appointment { get; set; }
 
-        //This will be false on details page and true on appointments page.
-        bool ShowAppointment = false;
+    //This will be false on details page and true on appointments page.
+    bool ShowAppointment = false;
 
-        //Create new appointment
-        protected override void OnInitialized()
+    //Create new appointment
+    protected override void OnInitialized()
+    {
+        appointment = new Appointment()
         {
-            appointment = new Appointment()
-            {
-                AppointmentDate = DateTime.Now
+            AppointmentDate = DateTime.Now
         };
-        appointment.Product = Service.GetProduct(ProductId);
+    appointment.Product = Service.GetProduct(ProductId);
     }
 
     void OnClickShowAppointment()
@@ -46,4 +46,4 @@ else
     }
 
 
-}
+    }

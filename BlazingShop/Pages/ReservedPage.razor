@@ -1,67 +1,59 @@
-﻿@page "/reservation"
+﻿
+@page "/reservation"
 @using BlazingShop.Data
 @using BlazingShop.Services
 @using BlazorInputFile
 @using System.IO
 
-@inherits OwningComponentBase<AppointmentListService>
+@inherits OwningComponentBase<AppointmentService>
 
-<AuthorizeView>
-    <Authorized Context="Auth">
 
-        @if (appointments == null)
-        {
-            <p><em>Loading...</em></p>
-        }
-        else
-        {
-            <div class="container border p-3">
-                <div class="row">
-                    <div class="col-5">
-                        <h3 class="text-info">Reserved items List</h3>
-                    </div>
-                    <div class="col-3">
-                        @*<button class="btn btn-info form-control" @onclick="AddNewAppointment">
-                            Add New Appointment
-                        </button>*@
-                    </div>
-                </div>
-                <div class="row pt-4">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Customer Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Item</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var obj in appointments)
-                            {
-                            <tr>
-                                <td>@obj.CustomerName</td>
-                                <td>@obj.CustomerPhone</td>
-                                <td>@obj.CustomerEmail</td>
-                                <td>@obj.Product.Name</td>
-                                @*<td style="text-align:center"><input type="checkbox" checked="@objAppointment" disabled/></td>*@
-                                <td>
-                                    <button class="btn btn-primary" style="width:150px" @onclick="(()=> EditAppointment(obj))">
-                                        Edit
-                                    </button>
-                                </td>
-                            </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
+@if (appointments == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="container border p-3">
+        <div class="row">
+            <div class="col-5">
+                <h3 class="text-info">| Reserved items List</h3>
             </div>
-        }
-
-    </Authorized>
-    <NotAuthorized> <p>You're not signed in!</p></NotAuthorized>
-</AuthorizeView>
+        </div>
+        <div class="row pt-4">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Reservation date</th>
+                        <th>Product</th>
+                        <th>Confirmed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var appointment in appointments)
+                    {
+                        <tr>
+                            <td>@appointment.CustomerName</td>
+                            <td>@appointment.CustomerPhone</td>
+                            <td>@appointment.CustomerEmail</td>
+                            <td>@appointment.AppointmentDate.ToShortDateString()</td>
+                            <td>@appointment.Product.Name</td>
+                            <td><input type="checkbox" checked="@(appointment.IsConfirmed)" class="form-control" disabled /></td>
+                            <td>
+                                <button class="btn btn-primary" style="width:150px" @onclick="(()=> EditAppointment(appointment))">
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
 
 @if (ShowPopup)
 {
@@ -70,7 +62,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h3 class="text-info">@(objAppointment.Id != 0 ? "Update" : "Create") Reservation</h3>
+                        <h3 class="text-info">| Edit Reservation</h3>
                         <button type="button" class="close" @onclick="ClosePopup">
                             <span aria-hidden="true">X</span>
                         </button>
@@ -82,44 +74,42 @@
                             <div class="col-9">
                                 <div class="row py-2">
                                     <div class="col-4">
-                                        Category Name
+                                        Customer Name
                                     </div>
                                     <div class="col-8">
-                                        @*<select @onchange="AppointmentSelectionChanged" class="form-control">
-                                            @foreach (var appointmentInd in appointments)
-                                            {
-                                                <option value="@appointmentInd.Id" selected="@(appointmentInd.Id==objAppointment.Id? true: false)">
-                                                    @appointmentInd.CustomerName
-                                                </option>
-                                            }
-                                        </select>*@
+                                        <input class="form-control" type="text" @bind="@objAppointment.CustomerName" />
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="col-4">
-                                        Product Name
+                                        Customer Phone
                                     </div>
                                     <div class="col-8">
-                                        <InputText class="form-control" @bind-Value="objAppointment.CustomerName" />
-                                        <ValidationMessage For="@(()=> objAppointment.CustomerName)"></ValidationMessage>
+                                        <input class="form-control" type="text" @bind="@objAppointment.CustomerPhone" />
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="col-4">
-                                        Product Price
+                                        Customer Email
                                     </div>
                                     <div class="col-8">
-                                        <InputNumber class="form-control" @bind-Value="objAppointment.CustomerPhone" />
-                                        <ValidationMessage For="@(()=> objAppointment.CustomerPhone)"></ValidationMessage>
+                                        <input class="form-control" type="text" @bind="@objAppointment.CustomerEmail" />
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="col-4">
-                                        Condition
+                                        Reservation Date
                                     </div>
                                     <div class="col-8">
-                                        <InputText class="form-control" @bind-Value="objAppointment.CustomerEmail" />
-                                        <ValidationMessage For="@(()=> objAppointment.CustomerEmail)"></ValidationMessage>
+                                        <input class="form-control" type="text" value="@objAppointment.AppointmentDate.ToShortDateString()" />
+                                    </div>
+                                </div>
+                                <div class="row py-2">
+                                    <div class="col-4">
+                                        Product
+                                    </div>
+                                    <div class="col-8">
+                                        <input class="form-control" type="text" @bind="@objAppointment.Product.Name" />
                                     </div>
                                 </div>
                                 <div class="row py-2">
@@ -127,35 +117,22 @@
                                         Reserved
                                     </div>
                                     <div class="col-8">
-                                        <input type="checkbox" class="form-control" checked="@objAppointment" @bind-value="objAppointment"/>
-                                        <ValidationMessage For="@(()=> objAppointment)"></ValidationMessage>
-                                    </div>
-                                </div>
-                                <div class="row py-2">
-                                    <div class="col-4">
-                                        Image
-                                    </div>
-                                    <div class="col-8">
-                                        <InputFile OnChange="HandleSelection"></InputFile>
+                                        @*<input type="checkbox" class="form-control" checked="@objAppointment" @bind="objAppointment" />*@
                                     </div>
                                 </div>
                                 <div class="row py-2">
                                     <div class="offset-4 col">
-                                        <button class="btn btn-primary form-control" type="submit">Submit</button>
+                                        <button class="btn btn-primary form-control" type="submit">Confirm</button>
                                     </div>
-                                    @if (objAppointment.Id > 0)
-                                    {
-                                        <div class="col">
-                                            <button class="btn btn-danger form-control"
-                                                    @onclick="DeleteAppointment"
-                                                    type="submit">Delete
-                                            </button>
-                                        </div>
-                                    }
+                                    <div class="col">
+                                        <button class="btn btn-danger form-control" @onclick="DeleteAppointment">
+                                            Delete
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-3">
-                                @*<img src="@convertImageToDisplay(objProduct.Image)" width="100%" />*@
+                                <img src="@convertImageToDisplay(objAppointment.Product.Image)" width="100%" style="border-radius:5px; border:1px solid #bbb9b9;" />
                             </div>
                         </div>
                     </div>
@@ -166,81 +143,47 @@
 }
 
 @code {
-    List<Category> categories;
-    List<Product> products;
     List<Appointment> appointments;
-    Appointment objAppointment = new Appointment();
-    bool ShowPopup = false;
 
-    Product objProduct = new Product();
+    Appointment objAppointment = new Appointment();
 
     public byte[] ImageUploaded { get; set; }
 
     protected override void OnInitialized()
     {
+        // Get current user
         appointments = Service.GetAppointments();
     }
 
-    //void AddNewAppointment()
-    //{
-    //    objAppointment = new Appointment();
-    //    //products = Service.GetProductList();
-    //    //objProduct.CategoryId = categories.ToList()[0].Id;
-    //    objAppointment.Id = 0;
-    //    ShowPopup = true;
-    //}
+    bool ShowPopup = false;
+
+    void ClosePopup()
+    {
+        // Close popup
+        ShowPopup = false;
+    }
 
     void EditAppointment(Appointment appointment)
     {
         objAppointment = appointment;
-        //products = Service.GetProductList();
+        appointments = Service.GetAppointments();
         ShowPopup = true;
     }
 
     void DeleteAppointment()
     {
         ShowPopup = false;
-        var result = Service.DeleteAppointment(objAppointment);
+        var result = @Service.DeleteAppointment(objAppointment);
         appointments.Clear();
-        appointments = Service.GetAppointments();
-    }
-
-    void ClosePopup()
-    {
-        ShowPopup = false;
+        appointments = @Service.GetAppointments();
     }
 
     void ValidSubmit()
     {
         var result = false;
         ShowPopup = false;
-        if (ImageUploaded != null)
-        {
-            objProduct.Image = ImageUploaded;
-            ImageUploaded = null;
-        }
-
-        if (objAppointment.Id > 0)
-        {
-            result = Service.UpdateAppointment(objAppointment);
-        }
-        else
-        {
-            result = Service.CreateAppointment(objAppointment);
-        }
-
+        result = Service.ConfirmAppointment(objAppointment);
         appointments = Service.GetAppointments();
-    }
-
-    async Task HandleSelection(IFileListEntry[] files)
-    {
-        var file = files.FirstOrDefault();
-        if (file != null)
-        {
-            var ms = new MemoryStream();
-            await file.Data.CopyToAsync(ms);
-            ImageUploaded = ms.ToArray();
-        }
     }
 
     string convertImageToDisplay(byte[] image)
@@ -251,14 +194,7 @@
             var finalStr = string.Format("data:image/jpg;base64,{0}", base64);
             return finalStr;
         }
-        return "";
+        else return "";
     }
 
-    void AppointmentSelectionChanged(ChangeEventArgs e)
-    {
-        if (int.TryParse(e.Value.ToString(), out int id))
-        {
-            objAppointment.Id = id;
-        }
-    }
 }

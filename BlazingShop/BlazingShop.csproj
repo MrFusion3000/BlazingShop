@@ -14,6 +14,9 @@
     <Compile Remove="Data\Migrations\20200113161334_addAppointment.Designer.cs" />
     <Compile Remove="Data\Migrations\20200119212410_sqlupdDb1.cs" />
     <Compile Remove="Data\Migrations\20200119212410_sqlupdDb1.Designer.cs" />
+    <Compile Remove="Data\Migrations\20200123104538_changeDefaulDBLocal.cs" />
+    <Compile Remove="Data\Migrations\20200123104538_changeDefaulDBLocal.Designer.cs" />
+    <Compile Remove="Services\AppointmentListService.cs" />
   </ItemGroup>
  
   <ItemGroup>
@@ -27,7 +30,7 @@
   
   <ItemGroup>
     <PackageReference Include="BlazorInputFile" Version="0.1.0-preview-00002" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="3.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.1" />
